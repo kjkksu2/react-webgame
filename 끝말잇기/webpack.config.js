@@ -1,5 +1,5 @@
 const path = require("path");
-const webpack = require("webpack");
+const RefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 
 module.exports = {
   name: "WordRelay",
@@ -24,19 +24,24 @@ module.exports = {
               "@babel/preset-env",
               {
                 targets: { browsers: ["> 5% in KR", "last 2 chrome versions"] },
-                debug: true,
               },
             ],
             "@babel/preset-react",
           ],
-          plugins: [],
+          plugins: ["react-refresh/babel"],
         },
       },
     ],
   },
-  plugins: [new webpack.LoaderOptionsPlugin({ debug: true })],
+  plugins: [new RefreshWebpackPlugin()],
   output: {
     path: path.join(__dirname, "dist"),
     filename: "[name].js",
+  },
+  devServer: {
+    // index.html일 때만 사용 가능
+    devMiddleware: { publicPath: "/dist" },
+    static: { directory: path.resolve(__dirname) }, // index.html의 위치
+    hot: true,
   },
 };
